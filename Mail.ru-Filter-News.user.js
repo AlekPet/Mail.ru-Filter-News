@@ -2,7 +2,7 @@
 // @name            Mail.ru Filter News
 // @name:ru         Mail.ru Фильтр новостей
 // @namespace       https://github.com/AlekPet/
-// @version         0.1
+// @version         0.1.1
 // @description     Highlight or hide news
 // @description:ru  Подсветка или скрытие новостей
 // @author          AlekPet 2021
@@ -42,6 +42,54 @@
 .tabs__filter_button:hover:after, .tabs__filter_button.activefilter:after{background: #005ff9;}\
 \
 .tabs__filter_button_info {position: absolute;z-index:1;color: white;background: #005ff994;padding: 3px;left: 80%;top: -5px;border-radius: 3px;user-select: none;font-size: 10px;line-height: 1;box-shadow: 2px 2px 3px #c0c0c0eb;}\
+\
+.filter_item_setting > .panelSettingFilter {\
+position: absolute;\
+top: 50%;\
+left: 50%;\
+width: 350px;\
+background: #ffd400bd;\
+transform: translate(-50%, -50%) !important;\
+z-index: 1;\
+box-shadow: 2px 2px 4px #f3951c;\
+border: 1px solid white;\
+padding: 4px;\
+display: none;\
+text-align: center;\
+font-family: monospace;\
+}\
+.panelSettingFilter__title {\
+background: linear-gradient(45deg, black, transparent);\
+color: white;\
+user-select:none;\
+}\
+.panelSettingFilter__close {\
+float: right;\
+transition: 1s all;\
+cursor:pointer;\
+user-select:none;\
+}\
+.panelSettingFilter__close:hover {\
+color: black;\
+}\
+.panelSettingFilter__body{\
+min-height: 50px;\
+padding: 4px;\
+}\
+.panelSettingFilter__body > div{\
+margin: 6px 0;\
+background: #ffffffb3;\
+padding: 2px;\
+}\
+.panelSettingFilter__foot{\
+background: linear-gradient(45deg, silver, transparent);\
+}\
+.panelSettingFilter__foot button{\
+margin: 0 5px;\
+}\
+.t_actions > input {\
+margin: 0 5px;\
+}\
 ");
 
     var ObjMailNews = {
@@ -49,7 +97,7 @@
     }
 
     function LS_save(){
-        var _tmp = JSON.stringify(ObjMailNews)
+        let _tmp = JSON.stringify(ObjMailNews)
 
         if(_tmp){
             GM_setValue('ObjMailNews', _tmp)
@@ -57,14 +105,14 @@
     }
 
     function LS_load(){
-        var _tmp = GM_getValue('ObjMailNews')
+        let _tmp = GM_getValue('ObjMailNews')
 
         ObjMailNews = _tmp ? JSON.parse(_tmp) : ObjMailNews
         log(ObjMailNews)
     }
 
-    function log(text){
-        console.log(text)
+    function log(){
+        console.log(arguments)
     }
 
     function rndcolor(type){
@@ -72,23 +120,28 @@
     }
 
     function isColor(strColor){
-        var op = new Option().style;
+        let op = new Option().style;
         op.color = strColor;
         return op.color !== '';
     }
 
     function addClassName(el,cls){
-        var all_class = el.className.split(' ')
+        let all_class = el.className.split(' ')
         all_class.push(cls)
         return all_class.join(' ')
     }
 
+    function showHide(el){
+        el.style.display = el.style.display == 'none' ? 'block' : 'none'
+    }
+
     var NewsDown = function(){
 
-        var self = this
+        let self = this
 
+        // Manipulation with elements contains filters values
         this.decorateStyle = function(el, num){
-            var itemObj = ObjMailNews.filter_list[num]//el.dataset.myp ? JSON.parse(el.dataset.myp) : null
+            let itemObj = ObjMailNews.filter_list[num]
 
             if(itemObj && Object.keys(itemObj).length){
                 if(itemObj.hide){
@@ -96,45 +149,61 @@
                     return;
                 }
 
-                if(itemObj.highlight){
-                    var color = itemObj.highlight ? itemObj.highlight : rndcolor(),
-                        highlight = "background:"+ color +';'
+                if(itemObj.bg_color){
+                    let color = itemObj.bg_color ? itemObj.bg_color : rndcolor(),
+                        bg_color = "background:"+ color +';'
 
-                    el.setAttribute("style", highlight)
+                    el.style.setProperty('background', color)
+                }
+
+                if(itemObj.font_color){
+                    let color = itemObj.font_color ? itemObj.font_color : '',
+                        element_a = el.querySelectorAll('a')
+
+                    element_a.length>1 ? element_a[1].style.setProperty('color', color) : element_a[0].style.setProperty('color', color)
+
                 }
             }
         }
 
+        // Find news contains filters values
         this.findNews = function(mut, obs){
-            var news = document.querySelectorAll(".tabs-content__item"),
+            let news = document.querySelectorAll(".tabs-content__item"),
                 itemObj = ObjMailNews.filter_list,
                 fElements = news.forEach(function(el){
 
-                    var t_content = el.textContent.toLowerCase()
+                    let t_content = el.textContent.toLowerCase()
 
                     // Restore element
                     if(el.hasAttribute('style')) el.removeAttribute('style')
+
+                    let element_a = el.querySelectorAll('a')
+                    if(element_a.length>1){
+                        if(element_a[1].hasAttribute('style')) element_a[1].removeAttribute('style')
+                    } else {
+                        if(element_a[0].hasAttribute('style')) element_a[0].removeAttribute('style')
+                    }
+
                     if(el.classList.contains('flter_item_hide')) el.classList.remove('flter_item_hide')
                     //
 
-                    for(var z in itemObj){
+                    for(let z in itemObj){
                         if(t_content.includes(itemObj[z].title.toLowerCase())){
                             self.decorateStyle(el, z)
                         }
                     }
                 })
             }
-
-        this.addItem = function(event){
-            var target = event.target
-            var change = prompt('Введите значение: ')
-            if(change && !/^\s*$/i.test(change)){
-                var color = prompt('Введите значение цвета (пусто случ. цвет, каждый раз):\n #000000 or rgba(255,0,0,1.0) or rgb(0,255,0)', 'random'),
+        // Prompt variant
+        this.addItemPrompt = function(event){
+            let title = prompt('Введите значение: ')
+            if(title && !/^\s*$/i.test(title)){
+                let font_color = prompt('Введите значение цвета (пусто случ. цвет, каждый раз):\n #000000 or rgba(255,0,0,1.0) or rgb(0,255,0)', 'random'),
                     hide = prompt('Скрывать в новостной ленте?\n0 - нет\n1 - да','0')
 
                 ObjMailNews.filter_list.push({
-                    title: change,
-                    highlight: isColor(color) ? color : rndcolor(),
+                    title: title,
+                    font_color: isColor(font_color) ? font_color : rndcolor(),
                     hide: hide !== '1' ? 0 : 1
                 })
 
@@ -144,18 +213,17 @@
             }
         }
 
-        this.clickItem = function(num, event){
-            var target = event.target,
-                itemObj = ObjMailNews.filter_list[num],
-                change = prompt('Введите значение: \ndel - удалить фильтр', itemObj.title)
+        this.clickItemPrompt = function(num, event){
+            let itemObj = ObjMailNews.filter_list[num],
+                title = prompt('Введите значение: \ndel - удалить фильтр', itemObj.title)
 
-            if(change && !/^\s*$/i.test(change)){
-                if(change !== 'del'){
-                    var color = prompt('Введите значение цвета (пусто случ. цвет):\n #000000 or rgba(255,0,0,1.0) or rgb(0,255,0)', itemObj.highlight),
+            if(title && !/^\s*$/i.test(title)){
+                if(title !== 'del'){
+                    let color = prompt('Введите значение цвета (пусто случ. цвет):\n #000000 or rgba(255,0,0,1.0) or rgb(0,255,0)', itemObj.bg_color),
                         hide = prompt('Скрывать в новостной ленте?\n0 - нет\n1 - да', itemObj.hide)
 
-                    itemObj.title = change
-                    itemObj.highlight = isColor(color) ? color : rndcolor()
+                    itemObj.title = title
+                    itemObj.bg_color = isColor(bg_color) ? bg_color : rndcolor()
                     itemObj.hide = hide == null ? itemObj.hide : hide !== '1' ? 0 : 1
 
                 } else {
@@ -167,39 +235,137 @@
                 LS_save()
             }
         }
+        // end - Prompt variant
 
-        this.listUpd = function(){
-            this.divBox.innerHTML = ''
+        // Add new item to filter
+        this.addItem = function(params){
+            let title = params.name,
+                bg_color = params.bg_color,
+                font_color = params.font_color,
+                hide = params.hide
 
-            for(var z in ObjMailNews.filter_list){
-                var itemObj = ObjMailNews.filter_list[z],
-                    d = document.createElement("div")
+            if(title && !/^\s*$/i.test(title)){
+                ObjMailNews.filter_list.push({
+                    title: title,
+                    bg_color: isColor(bg_color) ? bg_color : rndcolor(),
+                    font_color: isColor(font_color) ? font_color : '',
+                    hide: hide !== '1' ? 0 : 1
+                })
 
-                d.className = 'filter_class filter_item'
-                d.textContent = itemObj.title
-                d.title = 'Фильтр: '+d.textContent + (itemObj.hide?' (скрыть)':'')
-                d.setAttribute("style", 'border-color:'+itemObj.highlight)
-
-                if(itemObj.hasOwnProperty('hide') && itemObj.hide){
-                    d.classList.add("filter_item_hide_legend")
-                }
-
-                d.addEventListener('click', this.clickItem.bind(this, z))
-
-                this.divBox.appendChild(d)
+                this.listUpd()
+                this.findNews()
+                LS_save();
+                this.sh(this.panelSettingFilter, 'hide', null)
+            } else {
+                alert('Поле пустое!')
             }
-
-            var addButton = document.createElement("div")
-            addButton.className = 'filter_class add_filter_item'
-            addButton.textContent = '+'
-            addButton.title = 'Добавить фильтр'
-            addButton.addEventListener('click', this.addItem.bind(this))
-            this.divBox.appendChild(addButton)
-
-            this.filter_button_info.textContent = ObjMailNews.filter_list.length
-            this.filter_button.title = 'Фильтр (Элементов: '+this.filter_button_info.textContent+')'
         }
 
+        // Edit exists filter item
+        this.clickItem = function(params, itemObj){
+            let title = params.name,
+                bg_color = params.bg_color,
+                font_color = params.font_color,
+                hide = params.hide
+
+            if(title && !/^\s*$/i.test(title)){
+                itemObj.title = title
+                itemObj.bg_color = isColor(bg_color) ? bg_color : rndcolor()
+                itemObj.font_color = isColor(font_color) ? font_color : ''
+                itemObj.hide = hide == null ? itemObj.hide : hide !== '1' ? 0 : 1
+
+                this.listUpd()
+                this.findNews()
+                LS_save()
+                this.sh(this.panelSettingFilter, 'hide', null)
+            } else {
+                alert('Ошибка поля name')
+            }
+        }
+
+        // Remove filter item
+        this.removeItem = function(itemObj, num){
+            if(confirm(`Удалить элемент: ${itemObj.title}`)){
+                ObjMailNews.filter_list.splice(num, 1)
+                this.listUpd()
+                this.findNews()
+                LS_save()
+                this.sh(this.panelSettingFilter, 'hide', null)
+            }
+        }
+
+        // Set default value fields
+        this.defaultValue = function(){
+            this.panel_name.value = ''
+            this.panel_bg_color.value = '#ffffff'
+            this.panel_font_color.value = '#528fdf'
+            this.panel_select[0].checked = true
+        }
+
+        // Set value fields from LocalStorage
+        this.setValueOBJ = function(itemObj){
+            this.panel_name.value = itemObj.title
+            this.panel_bg_color.value = itemObj.bg_color
+            this.panel_font_color.value = itemObj.font_color
+            this.panel_select[+itemObj.hide].checked = true
+        }
+
+        // PopUp window setting, add and edit filtered items
+        this.sh = function(el, tip, num){
+            let new_nodes_save = this.panel_button_save.cloneNode(true),
+                new_nodes_remove = this.panel_button_remove.cloneNode(true)
+
+            this.panel_button_save.parentNode.replaceChild(new_nodes_save, this.panel_button_save);
+            this.panel_button_save = new_nodes_save
+
+            this.panel_button_remove.parentNode.replaceChild(new_nodes_remove, this.panel_button_remove);
+            this.panel_button_remove = new_nodes_remove
+
+            // Add new item
+            if(tip == 'addItem'){
+                this.panel_button_remove.setAttribute('disabled', 'disabled')
+
+                this.defaultValue()
+                this.panel_button_save.addEventListener('click', function(){
+                    self.addItem({
+                        name: self.panel_name.value,
+                        bg_color: self.panel_bg_color.value,
+                        font_color: self.panel_font_color.value,
+                        hide: self.panelSettingFilter.querySelectorAll('input[name=tip_actions]:checked')[0].value
+                    })
+                })
+            }
+
+            // Edit item
+            if(num && tip == 'clickItem'){
+                this.panel_button_remove.removeAttribute('disabled')
+
+                let itemObj = ObjMailNews.filter_list[num]
+                this.setValueOBJ(itemObj)
+
+                this.panel_button_save.addEventListener('click', function(){
+                    self.clickItem({
+                        name: self.panel_name.value,
+                        bg_color: self.panel_bg_color.value,
+                        font_color: self.panel_font_color.value,
+                        hide: self.panelSettingFilter.querySelectorAll('input[name=tip_actions]:checked')[0].value
+                    }, itemObj)
+                })
+
+                this.panel_button_remove.addEventListener('click', function(event){
+                    self.removeItem(itemObj, num)
+                }, false)
+            }
+
+            // Other deafault value
+            if(!tip || tip == 'hide'){
+                this.defaultValue()
+            }
+
+            showHide(el)
+        }
+
+        // Show Hide Buttons and filter items
         this.showhide = function(){
             if(!this.divBox.classList.contains('filter_item_box_show')){
                 this.divBox.classList.add('filter_item_box_show')
@@ -208,13 +374,50 @@
                 this.divBox.classList.remove('filter_item_box_show')
                 this.filter_button.classList.remove('activefilter')
             }
-            //this.divBox.style.display = this.divBox.style.display == 'block' ? 'none' : 'block'
         }
 
+        // Update filter items
+        this.listUpd = function(){
+            this.divBox.innerHTML = ''
+
+            for(let z in ObjMailNews.filter_list){
+                let itemObj = ObjMailNews.filter_list[z],
+                    d = document.createElement("div")
+
+                d.className = 'filter_class filter_item'
+                d.textContent = itemObj.title
+                d.title = 'Фильтр: '+d.textContent + (itemObj.hide?' (скрыть)':'')
+                d.setAttribute("style", `border-color: ${itemObj.bg_color};color:${itemObj.font_color}`)
+
+                if(itemObj.hasOwnProperty('hide') && itemObj.hide){
+                    d.classList.add("filter_item_hide_legend")
+                }
+                //d.addEventListener('click', this.clickItem.bind(this, z))
+                d.addEventListener('click', function(event){
+                    self.sh(self.panelSettingFilter, 'clickItem', z)
+                })
+
+                this.divBox.appendChild(d)
+            }
+
+            let addButton = document.createElement("div")
+            addButton.className = 'filter_class add_filter_item'
+            addButton.textContent = '+'
+            addButton.title = 'Добавить фильтр'
+            addButton.addEventListener('click', function(){
+                self.sh(self.panelSettingFilter, 'addItem', null)
+            })
+            this.divBox.appendChild(addButton)
+
+            this.filter_button_info.textContent = ObjMailNews.filter_list.length
+            this.filter_button.title = 'Фильтр (Элементов: '+this.filter_button_info.textContent+')'
+        }
+
+        // Main function initilization
         this.init = function(){
             LS_load()
 
-            var config = {
+            let config = {
                 attributes: true,
                 attributeFilter:["data-show-pixel"],
                 //childList: true,
@@ -224,6 +427,9 @@
 
             this.divBox = document.createElement("div")
             this.divBox.classList.add('filter_item_box')
+
+            this.divBoxSetting = document.createElement("div")
+            this.divBoxSetting.classList.add('filter_item_setting')
 
             this.filter_button = document.createElement("a")
             this.filter_button.href = '#'
@@ -240,8 +446,44 @@
 
             tabs.appendChild(this.filter_button)
             tabs.nextElementSibling.parentNode.insertBefore(this.divBox,tabs.nextElementSibling)
+            tabs.nextElementSibling.parentNode.insertBefore(this.divBoxSetting,tabs.nextElementSibling)
 
             this.filter_button.addEventListener('click', this.showhide.bind(this))
+
+            // Panel settings
+            this.panelSettingFilter = document.createElement("div")
+            this.panelSettingFilter.classList.add('panelSettingFilter')
+            this.panelSettingFilter.setAttribute('style','display:none;')
+
+            let htmlCode = '<div class="panelSettingFilter__title">'+
+                '<span>Settings</span>'+
+                '<div class="panelSettingFilter__close">X</div>'+
+                '</div>'+
+                //'<form id="filter_form">'+
+                '<div class="panelSettingFilter__body">'+
+                '<div>Слово: <input type="text" placeholder="Название фильтра"/></div>'+
+                '<div>Цвет фона: <input id="item_bg_color" type="color"/></div>'+
+                '<div>Цвет текста: <input id="item_font_color" type="color"/></div>'+
+                '<div class="t_actions">Тип:<br>'+
+                '<input id="t_show" type="radio" name="tip_actions" value="0" checked/><label for="t_show">Show</label>'+
+                '<input id="t_hide" type="radio" name="tip_actions" value="1" /><label for="t_hide">Hide</label>'+
+                //'<input id="t_other" type="radio" name="tip_actions" value="2" /><label for="t_other">Other</label>'+
+                '</div>'+
+                '<div class="panelSettingFilter__foot"><button id="item_save">Сохранить</button><button id="item_remove">Удалить</button></div>'//+
+            //'</form>'
+
+            this.panelSettingFilter.innerHTML = htmlCode
+            this.divBoxSetting.appendChild(this.panelSettingFilter)
+            //
+            this.panel_name = this.panelSettingFilter.querySelector('input[type=text]')
+            this.panel_bg_color = this.panelSettingFilter.querySelector('#item_bg_color')
+            this.panel_font_color = this.panelSettingFilter.querySelector('#item_font_color')
+            this.panel_select = this.panelSettingFilter.querySelectorAll('input[name=tip_actions]')
+            this.panel_button_save = this.panelSettingFilter.querySelector('#item_save')
+            this.panel_button_remove = this.panelSettingFilter.querySelector('#item_remove')
+            this.panel_button_remove.setAttribute('disabled', 'disabled')
+            this.panelSettingFilter.querySelector('.panelSettingFilter__close').addEventListener('click', this.sh.bind(this,this.panelSettingFilter))
+            //
 
             this.findNews()
 
