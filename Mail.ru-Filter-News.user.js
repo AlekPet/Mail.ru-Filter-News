@@ -2,9 +2,9 @@
 // @name            Mail.ru Filter News
 // @name:ru         Mail.ru Фильтр новостей
 // @namespace       https://github.com/AlekPet/
-// @version         0.1.1
-// @description     Highlight or hide news
-// @description:ru  Подсветка или скрытие новостей
+// @version         0.1.2
+// @description     Highlight, user styles and hide news
+// @description:ru  Подсветка, пользовательские стили и скрытие новостей
 // @author          AlekPet 2021
 // @license         MIT; https://raw.githubusercontent.com/AlekPet/Mail.ru-Filter-News/master/LICENSE
 // @icon         data:image/svg+xml,%3Csvg viewBox%3D%220 0 95 32%22 xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 xmlns%3Aserif%3D%22http%3A%2F%2Fwww.serif.com%2F%22 fill-rule%3D%22evenodd%22 clip-rule%3D%22evenodd%22 stroke-linejoin%3D%22round%22 stroke-miterlimit%3D%221.414%22%3E%3Cpath serif%3Aid%3D%2232_%40mail_w%22 fill%3D%22none%22 d%3D%22M0 0h95v32H0z%22%2F%3E%3CclipPath id%3D%22a%22%3E%3Cpath d%3D%22M0 0h95v32H0z%22%2F%3E%3C%2FclipPath%3E%3Cg clip-path%3D%22url(%23a)%22%3E%3Cpath fill%3D%22%23005ff9%22 d%3D%22M91.063 2.96h3.033v20.593h-3.033zM87.785 23.553h-3.033V8.96h3.033v14.593zM86.269 2.449a2.048 2.048 0 1 1-.001 4.095 2.048 2.048 0 0 1 .001-4.095zM81.475 23.553h-2.982v-1.596c-1.068 1.21-2.95 1.97-4.72 1.97a7.674 7.674 0 0 1-7.671-7.671 7.675 7.675 0 0 1 7.671-7.671c1.77 0 3.553.667 4.72 1.846V8.96h2.982v14.593zM73.87 11.651c2.61 0 4.664 1.868 4.664 4.605 0 2.738-2.054 4.622-4.664 4.622-2.611 0-4.595-2.011-4.595-4.622 0-2.61 1.984-4.605 4.595-4.605zM43.841 23.553H40.86V8.96h2.981v1.019c.662-.622 1.903-1.391 3.625-1.394 2.115 0 3.692.89 4.773 2.322 1.182-1.417 3.13-2.322 5.116-2.322 3.725 0 6.264 2.516 6.264 6.436v8.532h-2.981v-8.532a3.458 3.458 0 0 0-3.454-3.454 3.457 3.457 0 0 0-3.454 3.454v8.532h-2.981v-8.532a3.458 3.458 0 0 0-3.454-3.454 3.457 3.457 0 0 0-3.454 3.454v8.532z%22%2F%3E%3Cpath d%3D%22M20.813 16A4.818 4.818 0 0 1 16 20.813 4.818 4.818 0 0 1 11.187 16 4.818 4.818 0 0 1 16 11.187 4.818 4.818 0 0 1 20.813 16M16 0C7.178 0 0 7.178 0 16s7.178 16 16 16c3.232 0 6.349-.962 9.013-2.783l.046-.032-2.156-2.506-.036.024A12.672 12.672 0 0 1 16 28.72C8.986 28.72 3.28 23.014 3.28 16S8.986 3.28 16 3.28 28.72 8.986 28.72 16c0 .909-.101 1.829-.3 2.734-.402 1.651-1.558 2.157-2.426 2.09-.873-.071-1.894-.693-1.901-2.215V16c0-4.463-3.63-8.093-8.093-8.093S7.907 11.537 7.907 16s3.63 8.093 8.093 8.093a8.03 8.03 0 0 0 5.734-2.389 5.198 5.198 0 0 0 3.997 2.389 5.399 5.399 0 0 0 3.678-1.078c.959-.728 1.675-1.781 2.071-3.046.063-.204.179-.672.18-.675l.003-.017C31.896 18.262 32 17.25 32 16c0-8.822-7.178-16-16-16%22 fill%3D%22%23ff9e00%22 fill-rule%3D%22nonzero%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E
@@ -35,6 +35,7 @@
 .add_filter_item:hover{background-color: #005ff9a1;color:#fff;}\
 \
 .filter_item_hide_legend:after {content: 'H';color: red;position: absolute;display: inline-block;margin-top: -11px;padding: 2px;border: 1px solid;background: #ffffffc7;}\
+.filter_item_styles_legend:after {content: 'CS';color: limegreen;position: absolute;display: inline-block;margin-top: -11px;padding: 2px;border: 1px solid;background: #ffffffc7;}\
 .filter_item_hide{display:none;}\
 \
 .tabs__filter_button{position: relative;display: -webkit-inline-flex;display: inline-flex;height: 27px;background: url(data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTAwIDEwMCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik03Ni40MjgsMjguOTg4Qzc1LjQ2NSwzMy4wMjQsNjMuODU1LDQ1LjE4Niw1Ni41LDUyLjU3OVY3NC4zNmwtMTIsNi45MjhWNTIuNTc5ICBjLTcuMzU2LTcuMzk0LTE4Ljk2NS0xOS41NTUtMTkuOTI4LTIzLjU5MUMyNC41MjksMjguODI1LDI0LjUsMjguNjYyLDI0LjUsMjguNWMwLTMuODY2LDEyLjE5My04LDI2LThjMTMuODA3LDAsMjYsNC4xMzQsMjYsOCAgQzc2LjUsMjguNjYyLDc2LjQ3MSwyOC44MjUsNzYuNDI4LDI4Ljk4OHogTTUwLjUsMjMuNWMtMTIuMTUsMC0yMywyLjc5MS0yMyw1YzIsNSwyMCwyNCwyMCwyNHYyNGMyLTEsNC0yLDYtM3YtMjFjMCwwLDE4LTE5LDIwLTI0ICBDNzMuNSwyNi4yOTEsNjIuNjUsMjMuNSw1MC41LDIzLjV6IE02Mi41LDM5LjVjLTUuMzYzLDUuOTUtMTEuOTMsMTMtMTEuOTMsMTNzLTYuODYxLTcuMTk4LTEyLjA3LTEzICBDNDUuOTE3LDM5LjU4NSw1NS40MDcsMzkuNjEzLDYyLjUsMzkuNXoiPjwvcGF0aD48L3N2Zz4=);width: 27px;background-size: 27px;top: 5px;}\
@@ -50,7 +51,7 @@ left: 50%;\
 width: 350px;\
 background: #ffd400bd;\
 transform: translate(-50%, -50%) !important;\
-z-index: 1;\
+z-index: 5;\
 box-shadow: 2px 2px 4px #f3951c;\
 border: 1px solid white;\
 padding: 4px;\
@@ -112,17 +113,18 @@ margin: 0 5px;\
     }
 
     function log(){
-        console.log(arguments)
+        console.log(...arguments)
     }
 
     function rndcolor(type){
         return type ? 'rgba('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+', 1.0)':'#'+Math.floor(Math.random()*16777215).toString(16)
     }
 
-    function isColor(strColor){
+    function isValidStyle(opt, strColor){
         let op = new Option().style;
-        op.color = strColor;
-        return op.color !== '';
+        if(!op.hasOwnProperty(opt)) return false
+        op[opt] = strColor;
+        return op[opt] !== '';
     }
 
     function addClassName(el,cls){
@@ -144,24 +146,49 @@ margin: 0 5px;\
             let itemObj = ObjMailNews.filter_list[num]
 
             if(itemObj && Object.keys(itemObj).length){
-                if(itemObj.hide){
+
+
+                if(itemObj.hide == '0'){
+                    // Show
+                    if(el.classList.contains('filter_item_hide')) el.classList.remove('filter_item_hide')
+
+                    // if out hide == 0 to set bg and color
+                    if(itemObj.bg_color){
+                        let bg_color = itemObj.bg_color ? itemObj.bg_color : rndcolor()
+
+                        el.style.setProperty('background', bg_color)
+                    }
+
+                    if(itemObj.font_color){
+                        let color = itemObj.font_color ? itemObj.font_color : '',
+                            element_a = el.querySelectorAll('a')
+
+                        element_a.length>1 ? element_a[1].style.setProperty('color', 'inherit') : element_a[0].style.setProperty('color', 'inherit')
+                        el.style.setProperty('color', color)
+
+                    }
+                    // ------------------------------------
+
+
+                } else if(itemObj.hide == '1'){
+                    // Hide
                     if(!el.classList.contains('filter_item_hide')) el.classList.add('filter_item_hide')
-                    return;
-                }
 
-                if(itemObj.bg_color){
-                    let color = itemObj.bg_color ? itemObj.bg_color : rndcolor(),
-                        bg_color = "background:"+ color +';'
+                } else if(itemObj.hide == '2' && itemObj.hasOwnProperty('c_Styles') && itemObj.c_Styles.length>0){
+                    // Customs styles
 
-                    el.style.setProperty('background', color)
-                }
+                    if(el.classList.contains('filter_item_hide')) el.classList.remove('filter_item_hide')
 
-                if(itemObj.font_color){
-                    let color = itemObj.font_color ? itemObj.font_color : '',
-                        element_a = el.querySelectorAll('a')
+                    let element_a = el.querySelectorAll('a'),
+                        edit_a_element = element_a.length>1 ? element_a[1] : element_a[0]
 
-                    element_a.length>1 ? element_a[1].style.setProperty('color', color) : element_a[0].style.setProperty('color', color)
+                    itemObj.c_Styles.forEach(function(_style, idx){
+                        let propStyle = _style.propStyle,
+                            propValue = _style.propValue
 
+                        if(edit_a_element.style.hasOwnProperty(propStyle)) edit_a_element.style.setProperty(propStyle, 'inherit')
+                        el.style.setProperty(propStyle, propValue)
+                    })
                 }
             }
         }
@@ -194,62 +221,22 @@ margin: 0 5px;\
                     }
                 })
             }
-        // Prompt variant
-        this.addItemPrompt = function(event){
-            let title = prompt('Введите значение: ')
-            if(title && !/^\s*$/i.test(title)){
-                let font_color = prompt('Введите значение цвета (пусто случ. цвет, каждый раз):\n #000000 or rgba(255,0,0,1.0) or rgb(0,255,0)', 'random'),
-                    hide = prompt('Скрывать в новостной ленте?\n0 - нет\n1 - да','0')
-
-                ObjMailNews.filter_list.push({
-                    title: title,
-                    font_color: isColor(font_color) ? font_color : rndcolor(),
-                    hide: hide !== '1' ? 0 : 1
-                })
-
-                this.listUpd()
-                this.findNews()
-                LS_save();
-            }
-        }
-
-        this.clickItemPrompt = function(num, event){
-            let itemObj = ObjMailNews.filter_list[num],
-                title = prompt('Введите значение: \ndel - удалить фильтр', itemObj.title)
-
-            if(title && !/^\s*$/i.test(title)){
-                if(title !== 'del'){
-                    let color = prompt('Введите значение цвета (пусто случ. цвет):\n #000000 or rgba(255,0,0,1.0) or rgb(0,255,0)', itemObj.bg_color),
-                        hide = prompt('Скрывать в новостной ленте?\n0 - нет\n1 - да', itemObj.hide)
-
-                    itemObj.title = title
-                    itemObj.bg_color = isColor(bg_color) ? bg_color : rndcolor()
-                    itemObj.hide = hide == null ? itemObj.hide : hide !== '1' ? 0 : 1
-
-                } else {
-                    ObjMailNews.filter_list.splice(num, 1)
-                }
-
-                this.listUpd()
-                this.findNews()
-                LS_save()
-            }
-        }
-        // end - Prompt variant
 
         // Add new item to filter
         this.addItem = function(params){
             let title = params.name,
                 bg_color = params.bg_color,
                 font_color = params.font_color,
-                hide = params.hide
+                hide = params.hide,
+                c_Styles = params.c_Styles
 
             if(title && !/^\s*$/i.test(title)){
                 ObjMailNews.filter_list.push({
                     title: title,
-                    bg_color: isColor(bg_color) ? bg_color : rndcolor(),
-                    font_color: isColor(font_color) ? font_color : '',
-                    hide: hide !== '1' ? 0 : 1
+                    bg_color: isValidStyle('background', bg_color) ? bg_color : rndcolor(),
+                    font_color: isValidStyle('color', font_color) ? font_color : '',
+                    hide: +hide> 2 ||  typeof(+hide) !== 'number' ? '0' : hide,
+                    c_Styles: !c_Styles.length ? [] : c_Styles
                 })
 
                 this.listUpd()
@@ -266,13 +253,15 @@ margin: 0 5px;\
             let title = params.name,
                 bg_color = params.bg_color,
                 font_color = params.font_color,
-                hide = params.hide
+                hide = params.hide,
+                c_Styles = params.c_Styles
 
             if(title && !/^\s*$/i.test(title)){
                 itemObj.title = title
-                itemObj.bg_color = isColor(bg_color) ? bg_color : rndcolor()
-                itemObj.font_color = isColor(font_color) ? font_color : ''
-                itemObj.hide = hide == null ? itemObj.hide : hide !== '1' ? 0 : 1
+                itemObj.bg_color = isValidStyle('background', bg_color) ? bg_color : rndcolor()
+                itemObj.font_color = isValidStyle('color', font_color) ? font_color : ''
+                itemObj.hide = hide == null ? itemObj.hide : +hide> 2 || typeof(+hide) !== 'number' ? '0' : hide
+                itemObj.c_Styles = !c_Styles.length ? !itemObj.c_Styles.length ? [] : itemObj.c_Styles : c_Styles
 
                 this.listUpd()
                 this.findNews()
@@ -300,6 +289,7 @@ margin: 0 5px;\
             this.panel_bg_color.value = '#ffffff'
             this.panel_font_color.value = '#528fdf'
             this.panel_select[0].checked = true
+            if(this.customStyles) this.customStyles.value = ''
         }
 
         // Set value fields from LocalStorage
@@ -308,6 +298,42 @@ margin: 0 5px;\
             this.panel_bg_color.value = itemObj.bg_color
             this.panel_font_color.value = itemObj.font_color
             this.panel_select[+itemObj.hide].checked = true
+        }
+
+        // Custom Styles object to text
+        this.customStylesSet = function(c_styles){
+            let textStyles = ''
+            if(c_styles.length>0){
+                c_styles.forEach(function(el,idx){
+                    if(el.hasOwnProperty('propStyle') && el.hasOwnProperty('propValue')){
+                        textStyles += `${el.propStyle}:${el.propValue}\n`
+                    }
+                })
+            }
+            return textStyles
+        }
+
+        // Custom Styles check value
+        this.customStylesIsset = function(ObjItem,_style){
+            return ObjItem.filter((el) => el.propStyle.toLowerCase() == _style.toLowerCase())
+        }
+
+        // Custom Styles text value to object
+        this.customStylesGet = function(text){
+            let massStyles = [],
+                arrStyles = text.split('\n')
+
+            if(arrStyles.length>0){
+                arrStyles.forEach(function(el,idx){
+                    let key_val = el.split(':')
+                    if(key_val.length == 2) {
+                        massStyles.push({propStyle: key_val[0].trim(), propValue: key_val[1].trim()})
+                    } else {
+                        return true
+                    }
+                })
+            }
+            return massStyles
         }
 
         // PopUp window setting, add and edit filtered items
@@ -321,17 +347,24 @@ margin: 0 5px;\
             this.panel_button_remove.parentNode.replaceChild(new_nodes_remove, this.panel_button_remove);
             this.panel_button_remove = new_nodes_remove
 
+            this.panelSettingFilter.setAttribute('data-item-id', num)
+
             // Add new item
             if(tip == 'addItem'){
                 this.panel_button_remove.setAttribute('disabled', 'disabled')
 
+                this.addremTextareaCS(null, false)
+
                 this.defaultValue()
+
                 this.panel_button_save.addEventListener('click', function(){
+                    const selectRadio = self.panelSettingFilter.querySelectorAll('input[name=tip_actions]:checked')[0].value
                     self.addItem({
                         name: self.panel_name.value,
                         bg_color: self.panel_bg_color.value,
                         font_color: self.panel_font_color.value,
-                        hide: self.panelSettingFilter.querySelectorAll('input[name=tip_actions]:checked')[0].value
+                        hide: selectRadio,
+                        c_Styles: self.customStyles ? self.customStylesGet(self.customStyles.value): []
                     })
                 })
             }
@@ -341,14 +374,23 @@ margin: 0 5px;\
                 this.panel_button_remove.removeAttribute('disabled')
 
                 let itemObj = ObjMailNews.filter_list[num]
+
                 this.setValueOBJ(itemObj)
 
+                this.addremTextareaCS(null, false)
+                if(itemObj.hide == '2'){
+                    this.addremTextareaCS(num)
+                    if(self.customStyles) self.customStyles.value = this.customStylesSet(itemObj.c_Styles)
+                }
+
                 this.panel_button_save.addEventListener('click', function(){
+                    const selectRadio = self.panelSettingFilter.querySelectorAll('input[name=tip_actions]:checked')[0].value
                     self.clickItem({
                         name: self.panel_name.value,
                         bg_color: self.panel_bg_color.value,
                         font_color: self.panel_font_color.value,
-                        hide: self.panelSettingFilter.querySelectorAll('input[name=tip_actions]:checked')[0].value
+                        hide: selectRadio,
+                        c_Styles: self.customStyles ? self.customStylesGet(self.customStyles.value): []
                     }, itemObj)
                 })
 
@@ -366,7 +408,7 @@ margin: 0 5px;\
         }
 
         // Show Hide Buttons and filter items
-        this.showhide = function(){
+        this.showhide_panel = function(){
             if(!this.divBox.classList.contains('filter_item_box_show')){
                 this.divBox.classList.add('filter_item_box_show')
                 this.filter_button.classList.add('activefilter')
@@ -386,11 +428,14 @@ margin: 0 5px;\
 
                 d.className = 'filter_class filter_item'
                 d.textContent = itemObj.title
-                d.title = 'Фильтр: '+d.textContent + (itemObj.hide?' (скрыть)':'')
-                d.setAttribute("style", `border-color: ${itemObj.bg_color};color:${itemObj.font_color}`)
+                d.title = 'Фильтр: '+d.textContent + (itemObj.hide == '1'?' (скрыть)': itemObj.hide == '2'? ' (польз. настройки)' : '')
 
-                if(itemObj.hasOwnProperty('hide') && itemObj.hide){
-                    d.classList.add("filter_item_hide_legend")
+                let issetValue = this.customStylesIsset(itemObj.c_Styles,'border-color')
+                d.setAttribute("style", `border-color: ${itemObj.hide == '2' && issetValue.length>0 ? issetValue[0].propValue : itemObj.bg_color};color:${itemObj.font_color}`)
+
+                if(itemObj.hasOwnProperty('hide')){
+                    if(itemObj.hide == '1') d.classList.add("filter_item_hide_legend")
+                    if(itemObj.hide == '2') d.classList.add("filter_item_styles_legend")
                 }
                 //d.addEventListener('click', this.clickItem.bind(this, z))
                 d.addEventListener('click', function(event){
@@ -411,6 +456,29 @@ margin: 0 5px;\
 
             this.filter_button_info.textContent = ObjMailNews.filter_list.length
             this.filter_button.title = 'Фильтр (Элементов: '+this.filter_button_info.textContent+')'
+        }
+
+        this.addremTextareaCS = function(num = null, hide = true){
+            let checked = this.panelSettingFilter.querySelectorAll('input[name=tip_actions]:checked')[0].value
+            if(checked == '2' && !this.customStyles && hide){
+                this.customStyles = document.createElement('textarea')
+                this.customStyles.id = 'customStyles'
+                this.customStyles.title = '<<Пользовательские настройки стилей>>\nПример:\nborder:2px dotted\nborder-color:limegreen\nbackground:linear-gradient(45deg, yellow, transparent)'
+                this.customStyles.setAttribute('style', 'width: 300px; height: 90px; max-width: 300px; max-height: 200px;')
+                this.customStyles.placeholder = 'property: value'
+                this.panel_action.appendChild(this.customStyles)
+
+                if(num != undefined && num != null){
+                    const ObjItem = ObjMailNews.filter_list[+num]
+                    this.customStyles.value = this.customStylesSet(ObjItem.c_Styles)
+                }
+
+            } else {
+                if(this.customStyles){
+                    this.panel_action.removeChild(this.customStyles)
+                    this.customStyles = null
+                }
+            }
         }
 
         // Main function initilization
@@ -448,7 +516,7 @@ margin: 0 5px;\
             tabs.nextElementSibling.parentNode.insertBefore(this.divBox,tabs.nextElementSibling)
             tabs.nextElementSibling.parentNode.insertBefore(this.divBoxSetting,tabs.nextElementSibling)
 
-            this.filter_button.addEventListener('click', this.showhide.bind(this))
+            this.filter_button.addEventListener('click', this.showhide_panel.bind(this))
 
             // Panel settings
             this.panelSettingFilter = document.createElement("div")
@@ -456,7 +524,7 @@ margin: 0 5px;\
             this.panelSettingFilter.setAttribute('style','display:none;')
 
             let htmlCode = '<div class="panelSettingFilter__title">'+
-                '<span>Settings</span>'+
+                '<span>Настройки фильтра</span>'+
                 '<div class="panelSettingFilter__close">X</div>'+
                 '</div>'+
                 //'<form id="filter_form">'+
@@ -465,9 +533,9 @@ margin: 0 5px;\
                 '<div>Цвет фона: <input id="item_bg_color" type="color"/></div>'+
                 '<div>Цвет текста: <input id="item_font_color" type="color"/></div>'+
                 '<div class="t_actions">Тип:<br>'+
-                '<input id="t_show" type="radio" name="tip_actions" value="0" checked/><label for="t_show">Show</label>'+
-                '<input id="t_hide" type="radio" name="tip_actions" value="1" /><label for="t_hide">Hide</label>'+
-                //'<input id="t_other" type="radio" name="tip_actions" value="2" /><label for="t_other">Other</label>'+
+                '<input id="t_show" type="radio" name="tip_actions" value="0" checked/><label for="t_show">Показать</label>'+
+                '<input id="t_hide" type="radio" name="tip_actions" value="1" /><label for="t_hide">Скрыть</label>'+
+                '<input id="t_customs" type="radio" name="tip_actions" value="2" title="Смотрите CSS справочники, для настройки" /><label for="t_customs" title="Смотрите CSS справочники, для настройки">Польз. настр.</label>'+
                 '</div>'+
                 '<div class="panelSettingFilter__foot"><button id="item_save">Сохранить</button><button id="item_remove">Удалить</button></div>'//+
             //'</form>'
@@ -475,6 +543,7 @@ margin: 0 5px;\
             this.panelSettingFilter.innerHTML = htmlCode
             this.divBoxSetting.appendChild(this.panelSettingFilter)
             //
+            this.panel_action = this.panelSettingFilter.querySelector('.t_actions')
             this.panel_name = this.panelSettingFilter.querySelector('input[type=text]')
             this.panel_bg_color = this.panelSettingFilter.querySelector('#item_bg_color')
             this.panel_font_color = this.panelSettingFilter.querySelector('#item_font_color')
@@ -482,8 +551,21 @@ margin: 0 5px;\
             this.panel_button_save = this.panelSettingFilter.querySelector('#item_save')
             this.panel_button_remove = this.panelSettingFilter.querySelector('#item_remove')
             this.panel_button_remove.setAttribute('disabled', 'disabled')
-            this.panelSettingFilter.querySelector('.panelSettingFilter__close').addEventListener('click', this.sh.bind(this,this.panelSettingFilter))
+            this.panelSettingFilter.querySelector('.panelSettingFilter__close').addEventListener('click', this.sh.bind(this,this.panelSettingFilter, 'hide', null))
             //
+            this.panel_select.forEach(function(el,idx){
+                el.addEventListener('change', function(){
+                    if(this.value == 2){
+                        let num = self.panelSettingFilter.dataset.itemId
+                        num = (typeof(num) == 'string' && num == 'null') ? JSON.parse('null') : num
+
+                        self.addremTextareaCS(num)
+                    } else {
+                        self.addremTextareaCS(null, false)
+                    }
+                })
+            })
+
 
             this.findNews()
 
