@@ -2,7 +2,7 @@
 // @name            Mail.ru Filter News
 // @name:ru         Mail.ru Фильтр новостей
 // @namespace       https://github.com/AlekPet/
-// @version         0.1.2
+// @version         0.1.2.1
 // @description     Highlight, user styles and hide news
 // @description:ru  Подсветка, пользовательские стили и скрытие новостей
 // @author          AlekPet 2021
@@ -96,6 +96,7 @@ margin: 0 5px;\
     var ObjMailNews = {
         filter_list: []
     }
+    const debug = false
 
     function LS_save(){
         let _tmp = JSON.stringify(ObjMailNews)
@@ -113,7 +114,7 @@ margin: 0 5px;\
     }
 
     function log(){
-        console.log(...arguments)
+        if(debug) console.log(...arguments)
     }
 
     function rndcolor(type){
@@ -213,7 +214,6 @@ margin: 0 5px;\
 
                     if(el.classList.contains('flter_item_hide')) el.classList.remove('flter_item_hide')
                     //
-
                     for(let z in itemObj){
                         if(t_content.includes(itemObj[z].title.toLowerCase())){
                             self.decorateStyle(el, z)
@@ -491,7 +491,8 @@ margin: 0 5px;\
                 //childList: true,
                 //subtree: true
             },
-                tabs = document.querySelector(".tabs")
+                tabs = document.querySelector(".tabs"),
+                elementMObj = document.querySelector(".tabs-content__item").parentNode
 
             this.divBox = document.createElement("div")
             this.divBox.classList.add('filter_item_box')
@@ -570,7 +571,7 @@ margin: 0 5px;\
             this.findNews()
 
             this.observer = new MutationObserver(this.findNews);
-            this.observer.observe(document.querySelector(".tabs-content_atlas"), config);
+            this.observer.observe(elementMObj, config);
         }
     }
 
