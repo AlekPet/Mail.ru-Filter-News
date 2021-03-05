@@ -2,7 +2,7 @@
 // @name            Mail.ru Filter News
 // @name:ru         Mail.ru Фильтр новостей
 // @namespace       https://github.com/AlekPet/
-// @version         0.1.2.1
+// @version         0.1.2.2
 // @description     Highlight, user styles and hide news
 // @description:ru  Подсветка, пользовательские стили и скрытие новостей
 // @author          AlekPet 2021
@@ -11,6 +11,7 @@
 // @match        http*://mail.ru
 // @updateURL    https://raw.githubusercontent.com/AlekPet/Mail.ru-Filter-News/master/Mail.ru-Filter-News.user.js
 // @downloadURL  https://raw.githubusercontent.com/AlekPet/Mail.ru-Filter-News/master/Mail.ru-Filter-News.user.js
+// @noframes
 // @run-at document-end
 // @grant GM_addStyle
 // @grant GM_setValue
@@ -21,7 +22,12 @@
     'use strict';
     GM_addStyle("\
 .filter_item_box{opacity: 0;height: 0;transition: transform 5s, height 3s, opacity 1s;-webkit-transform:transform 5s, height 3s, opacity 1s;overflow: hidden;}\
-.filter_item_box_show{opacity: 1;height: auto;}\
+.filter_item_box_show{opacity: 1;height: auto;border-left: 8px solid #00ff45;}\
+.filter_item_box.filter_item_box_show:before {\
+    content: 'Фильтры:';\
+    position: relative;\
+    margin: 20px;\
+}\
 .filter_item_box > div {transform: translateX(100vw);-webkit-transform: translateX(100vw);}\
 .filter_item_box.filter_item_box_show > div {transform: translateX(0);-webkit-transform: translateX(0);}\
 \
@@ -91,12 +97,20 @@ margin: 0 5px;\
 .t_actions > input {\
 margin: 0 5px;\
 }\
+.item_filter_glow {\
+padding: 2px;\
+animation: f_glow 2s infinite;\
+}\
+@keyframes f_glow{\
+0%,100%{background: yellow; transform:scale(1);}\
+50%{background: orange; transform:scale(1.05);}\
+}\
 ");
 
     var ObjMailNews = {
         filter_list: []
     }
-    const debug = false
+    const debug = !false
 
     function LS_save(){
         let _tmp = JSON.stringify(ObjMailNews)
@@ -117,7 +131,7 @@ margin: 0 5px;\
         if(debug) console.log(...arguments)
     }
 
-    function rndcolor(type){
+    function rndcolor(type=false){
         return type ? 'rgba('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+', 1.0)':'#'+Math.floor(Math.random()*16777215).toString(16)
     }
 
@@ -194,6 +208,37 @@ margin: 0 5px;\
             }
         }
 
+        // Change inside elements
+        this.changeInside = function(el, text){
+            let el_text = el.innerText || el.textContent,
+                el_text_lower = el_text.toLowerCase()
+
+            if(el_text_lower.includes(text)){
+                const start = el_text_lower.indexOf(text),
+                      end = start + text.length,
+                      orig_text = el_text.slice(start,end),
+                      newTextWithStyle = el_text.replaceAll(orig_text, `<span class="item_filter_glow">${orig_text}</span>`)
+
+                el.innerHTML = newTextWithStyle
+            }
+        }
+
+        this.findGlow = function(el, text){
+            const self = this,
+                  _nodes = Array.from(el.children)
+
+            _nodes.forEach(function(_el,idx){
+                if(_el.children.length>0){
+                    self.findGlow(_el, text)
+                } else {
+                    if(_el.nodeType != 3 || _el.tagName != 'IMG'){
+                        self.changeInside(_el,text)
+                        return false
+                    }
+                }
+            })
+        }
+
         // Find news contains filters values
         this.findNews = function(mut, obs){
             let news = document.querySelectorAll(".tabs-content__item"),
@@ -213,9 +258,17 @@ margin: 0 5px;\
                     }
 
                     if(el.classList.contains('flter_item_hide')) el.classList.remove('flter_item_hide')
+
+                    // remove style find text highlight
+                    el.querySelectorAll('span.item_filter_glow').forEach(function(_el){
+                        _el.classList.remove('item_filter_glow')
+                    })
+
                     //
                     for(let z in itemObj){
-                        if(t_content.includes(itemObj[z].title.toLowerCase())){
+                        const title = itemObj[z].title.toLowerCase()
+                        if(t_content.includes(title)){
+                            self.findGlow(el, title)
                             self.decorateStyle(el, z)
                         }
                     }
@@ -286,7 +339,7 @@ margin: 0 5px;\
         // Set default value fields
         this.defaultValue = function(){
             this.panel_name.value = ''
-            this.panel_bg_color.value = '#ffffff'
+            this.panel_bg_color.value = rndcolor() || '#ffffff'
             this.panel_font_color.value = '#528fdf'
             this.panel_select[0].checked = true
             if(this.customStyles) this.customStyles.value = ''
@@ -500,6 +553,9 @@ margin: 0 5px;\
             this.divBoxSetting = document.createElement("div")
             this.divBoxSetting.classList.add('filter_item_setting')
 
+            this.divBox.setAttribute("name","filter_itemBox")
+            this.divBoxSetting.setAttribute("name","filter_itemSetting")
+
             this.filter_button = document.createElement("a")
             this.filter_button.href = '#'
             this.filter_button.title = 'Фильтр'
@@ -514,8 +570,13 @@ margin: 0 5px;\
             this.listUpd()
 
             tabs.appendChild(this.filter_button)
-            tabs.nextElementSibling.parentNode.insertBefore(this.divBox,tabs.nextElementSibling)
-            tabs.nextElementSibling.parentNode.insertBefore(this.divBoxSetting,tabs.nextElementSibling)
+
+            // !mail.ru#@#body > .zeropixel ~ * .searchContainer ~ .tabs + div[class] ~ div  <--- uBlock blocking userscript elements
+            /*tabs.nextElementSibling.parentNode.insertBefore(this.divBox,tabs.nextElementSibling)
+            tabs.nextElementSibling.parentNode.insertBefore(this.divBoxSetting,tabs.nextElementSibling)*/
+
+            document.getElementById("grid:middle").appendChild(this.divBox,this.divBoxSetting)
+            document.getElementById("grid:middle").appendChild(this.divBoxSetting)
 
             this.filter_button.addEventListener('click', this.showhide_panel.bind(this))
 
