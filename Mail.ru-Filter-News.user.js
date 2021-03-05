@@ -2,7 +2,7 @@
 // @name            Mail.ru Filter News
 // @name:ru         Mail.ru Фильтр новостей
 // @namespace       https://github.com/AlekPet/
-// @version         0.1.2.2
+// @version         0.1.2.3
 // @description     Highlight, user styles and hide news
 // @description:ru  Подсветка, пользовательские стили и скрытие новостей
 // @author          AlekPet 2021
@@ -572,11 +572,17 @@ animation: f_glow 2s infinite;\
             tabs.appendChild(this.filter_button)
 
             // !mail.ru#@#body > .zeropixel ~ * .searchContainer ~ .tabs + div[class] ~ div  <--- uBlock blocking userscript elements
-            /*tabs.nextElementSibling.parentNode.insertBefore(this.divBox,tabs.nextElementSibling)
-            tabs.nextElementSibling.parentNode.insertBefore(this.divBoxSetting,tabs.nextElementSibling)*/
+            this.divBoxPre = document.createElement("span")
 
-            document.getElementById("grid:middle").appendChild(this.divBox,this.divBoxSetting)
-            document.getElementById("grid:middle").appendChild(this.divBoxSetting)
+            this.divBoxPre.appendChild(this.divBox)
+            this.divBoxPre.appendChild(this.divBoxSetting)
+
+            tabs.nextElementSibling.parentNode.insertBefore(this.divBoxPre,tabs.nextElementSibling)
+
+            //tabs.nextElementSibling.parentNode.insertBefore(this.divBoxSetting,tabs.nextElementSibling)
+
+            //document.getElementById("grid:middle").appendChild(this.divBox,this.divBoxSetting)
+            //document.getElementById("grid:middle").appendChild(this.divBoxSetting)
 
             this.filter_button.addEventListener('click', this.showhide_panel.bind(this))
 
