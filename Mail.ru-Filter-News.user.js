@@ -2,7 +2,7 @@
 // @name            Mail.ru Filter News
 // @name:ru         Mail.ru Фильтр новостей
 // @namespace       https://github.com/AlekPet/
-// @version         0.1.2.3
+// @version         0.1.2.4
 // @description     Highlight, user styles and hide news
 // @description:ru  Подсветка, пользовательские стили и скрытие новостей
 // @author          AlekPet 2021
