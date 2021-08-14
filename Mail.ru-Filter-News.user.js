@@ -2,7 +2,7 @@
 // @name            Mail.ru Filter News
 // @name:ru         Mail.ru Фильтр новостей
 // @namespace       https://github.com/AlekPet/
-// @version         0.1.2.4
+// @version         0.1.2.5
 // @description     Highlight, user styles and hide news
 // @description:ru  Подсветка, пользовательские стили и скрытие новостей
 // @author          AlekPet 2021
@@ -241,7 +241,7 @@ animation: f_glow 2s infinite;\
 
         // Find news contains filters values
         this.findNews = function(mut, obs){
-            let news = document.querySelectorAll(".tabs-content__item"),
+            let news = document.querySelectorAll("ul.tabs-content > li"),
                 itemObj = ObjMailNews.filter_list,
                 fElements = news.forEach(function(el){
 
@@ -540,12 +540,13 @@ animation: f_glow 2s infinite;\
 
             let config = {
                 attributes: true,
-                attributeFilter:["data-show-pixel"],
-                //childList: true,
-                //subtree: true
+                //attributeFilter:["data-show-pixel"],
+                childList: true,
+                //subtree: true,
+                //characterData: true
             },
                 tabs = document.querySelector(".tabs"),
-                elementMObj = document.querySelector(".tabs-content__item").parentNode
+                elementMObj = document.querySelector("ul.tabs-content")//.parentNode
 
             this.divBox = document.createElement("div")
             this.divBox.classList.add('filter_item_box')
