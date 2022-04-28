@@ -2,7 +2,7 @@
 // @name            Mail.ru Filter News
 // @name:ru         Mail.ru Фильтр новостей
 // @namespace       https://github.com/AlekPet/
-// @version         0.1.2.5
+// @version         0.1.2.5.1
 // @description     Highlight, user styles and hide news
 // @description:ru  Подсветка, пользовательские стили и скрытие новостей
 // @author          AlekPet 2021
@@ -24,9 +24,9 @@
 .filter_item_box{opacity: 0;height: 0;transition: transform 5s, height 3s, opacity 1s;-webkit-transform:transform 5s, height 3s, opacity 1s;overflow: hidden;}\
 .filter_item_box_show{opacity: 1;height: auto;border-left: 8px solid #00ff45;}\
 .filter_item_box.filter_item_box_show:before {\
-    content: 'Фильтры:';\
-    position: relative;\
-    margin: 20px;\
+content: 'Фильтры:';\
+position: relative;\
+margin: 20px;\
 }\
 .filter_item_box > div {transform: translateX(100vw);-webkit-transform: translateX(100vw);}\
 .filter_item_box.filter_item_box_show > div {transform: translateX(0);-webkit-transform: translateX(0);}\
@@ -643,5 +643,8 @@ animation: f_glow 2s infinite;\
         }
     }
 
-    new NewsDown().init()
+    document.body.onload = function(){
+        new NewsDown().init()
+    }
+
 })();
