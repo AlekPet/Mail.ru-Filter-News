@@ -2,7 +2,7 @@
 // @name            Mail.ru Filter News
 // @name:ru         Mail.ru Фильтр новостей
 // @namespace       https://github.com/AlekPet/
-// @version         0.1.2.5.3
+// @version         0.1.2.5.4
 // @description     Highlight, user styles and hide news
 // @description:ru  Подсветка, пользовательские стили и скрытие новостей
 // @author          AlekPet 2021
@@ -216,7 +216,7 @@ cursor: pointer;\
                 title = inputTitleStyle()
             }
 
-        const massivStyles = self.customStylesGet(customStyles)
+        const massivStyles = customStylesGet(customStyles)
 
         if(!massivStyles.length){
             alert('Параметры настройки стиля, в тектовом поле пустое, нечего сохранять!')
@@ -263,6 +263,24 @@ cursor: pointer;\
         }
 
         return options
+    }
+
+    // Custom Styles text value to object
+    const customStylesGet = function(text){
+        let massStyles = [],
+            arrStyles = text.split('\n')
+
+        if(arrStyles.length>0){
+            arrStyles.forEach(function(el,idx){
+                let key_val = el.split(':')
+                if(key_val.length == 2) {
+                    massStyles.push({propStyle: key_val[0].trim(), propValue: key_val[1].trim()})
+                } else {
+                    return true
+                }
+            })
+        }
+        return massStyles
     }
 
     var NewsDown = function(){
@@ -488,23 +506,6 @@ cursor: pointer;\
             return ObjItem.filter((el) => el.propStyle.toLowerCase() == _style.toLowerCase())
         }
 
-        // Custom Styles text value to object
-        this.customStylesGet = function(text){
-            let massStyles = [],
-                arrStyles = text.split('\n')
-
-            if(arrStyles.length>0){
-                arrStyles.forEach(function(el,idx){
-                    let key_val = el.split(':')
-                    if(key_val.length == 2) {
-                        massStyles.push({propStyle: key_val[0].trim(), propValue: key_val[1].trim()})
-                    } else {
-                        return true
-                    }
-                })
-            }
-            return massStyles
-        }
 
         // PopUp window setting, add and edit filtered items
         this.sh = function(el, tip, num){
@@ -716,6 +717,11 @@ cursor: pointer;\
                 }
 
                 // Add event listeners
+                let origStyle = customStyles.value
+                customStyles.addEventListener('input', ()=>{
+                    customStylesAdd.textContent = customStyles.value != origStyle ? 'Сохранить' : 'Добавить'
+                })
+
                 this.custom_styles_box.addEventListener('click', ()=>{
                     try{
                         event.stopPropagation()
@@ -735,10 +741,12 @@ cursor: pointer;\
                                     }
 
                                     // Edit style
-                                    ObjMailNews.stylesList[customStylesSelect.value].style_params = this.customStylesGet(customStyles.value)
+                                    ObjMailNews.stylesList[customStylesSelect.value].style_params = customStylesGet(customStyles.value)
 
                                     LS_save()
                                     change = true
+                                    origStyle = customStyles.value
+                                    customStylesAdd.textContent = 'Добавить'
                                     alert('Стиль был обновлен!')
                                 } else {
                                     addCustomStyles(customStyles.value)
