@@ -2,7 +2,7 @@
 // @name            Mail.ru Filter News
 // @name:ru         Mail.ru Фильтр новостей
 // @namespace       https://github.com/AlekPet/
-// @version         0.1.2.7
+// @version         0.1.2.7.1
 // @description     Highlight, user styles and hide news
 // @description:ru  Подсветка, пользовательские стили и скрытие новостей
 // @author          AlekPet 2021
@@ -568,6 +568,7 @@ cursor: pointer;\
                     this.addremTextareaCS(itemObj.c_Styles)
                 }
 
+
                 this.panel_button_save.addEventListener('click', function(){
                     const selectRadio = self.panelSettingFilter.querySelectorAll('input[name=tip_actions]:checked')[0].value,
                           checked = self.panelSettingFilter.querySelectorAll('input[name=tip_actions]:checked')[0].value,
@@ -696,7 +697,11 @@ cursor: pointer;\
                 let customStyles = document.createElement('textarea')
                 customStyles.id = 'customStyles'
                 customStyles.title = '<<Пользовательские настройки стилей>>\nПример:\nborder:2px dotted\nborder-color:limegreen\nbackground:linear-gradient(45deg, yellow, transparent)'
-                customStyles.setAttribute('style', 'width: 300px; height: 90px; max-width: 300px; max-height: 200px;')
+                const styles = {width: "300px", "max-width": "300px", "max-height": "200px"}
+                for(const s in styles){
+                    customStyles.style[s] = styles[s]
+                }
+
                 customStyles.placeholder = 'property: value'
 
                 this.custom_styles_box.appendChild(customStylesSelect)
@@ -814,6 +819,7 @@ cursor: pointer;\
             }
         }
 
+
         // Main function initilization
         this.init = function(){
             LS_load()
@@ -926,6 +932,8 @@ cursor: pointer;\
                         } else {
                             self.addremTextareaCS(null, false)
                         }
+
+
                     } catch(e){
                         throw new Error(e)
                     }
